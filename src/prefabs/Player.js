@@ -11,17 +11,19 @@ class Player extends Phaser.GameObjects.Sprite {
         this.jumpForce = -600;
         this.isCrouching = false;
         this.itemStatus = 0;
-        this.hasPistol = false;
         this.isAttacking;
+        this.facingRight = true;
     }
 
 
     update() {
         // Left & right movement
         if (keyLEFT.isDown && !this.isAttacking){
+            this.facingRight = false;
             this.body.setVelocityX(0-this.moveSpeed);
             this.play('run_left', true);
         }else if(keyRIGHT.isDown && !this.isAttacking){
+            this.facingRight = true;
             this.play('run_right', true);
             this.body.setVelocityX(this.moveSpeed);
         }else{
@@ -30,9 +32,9 @@ class Player extends Phaser.GameObjects.Sprite {
             this.play('run_left', false);
         }
 
-        if(Phaser.Input.Keyboard.JustUp(keyLEFT)){
+        if(this.body.velocity.x == 0 && !this.facingRight){
             this.setTexture('player_idle_left');
-        }else if(Phaser.Input.Keyboard.JustUp(keyRIGHT)){
+        }else if(this.body.velocity.x == 0 && this.facingRight){
             this.setTexture('player_idle_right');
         }
 
@@ -61,20 +63,6 @@ class Player extends Phaser.GameObjects.Sprite {
             this.y = game.config.height - 30;
             this.x -= 20;
         }
-        if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isAttacking){
-            switch (this.itemStatus){
-                case 0: //nothing
-                    break;
-                case 1: //melee
-                    
-                    break;
-                case 2: //pistol
-                    break;
-                case 3: //shotgun
-                    break;
-            }
-        }
-
     }
 
     reset() {
@@ -82,11 +70,6 @@ class Player extends Phaser.GameObjects.Sprite {
         this.x = 0; 
     }
 
-    gainWeapon(weapon){
-        if(weapon == "pistol"){
-            this.hasPistol = true;
-        }
-    }
 }
 
 

@@ -23,7 +23,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 // Reserve key tags
-let keySpace, keyA, keyD, keyW, keyS, keyUp, keyLEFT, keyRIGHT, keyDown, keyF;
+let keySpace, keyA, keyD, keyW, keyS, keyUp, keyLEFT, keyRIGHT, keyDown, keyF, keyX;
 // globals
 const centerX = game.config.width / 2;
 const centerY = game.config.height / 2;

@@ -12,6 +12,7 @@ class Level1 extends Phaser.Scene {
         this.load.image('player_idle_right', 'playerIdleRight.png');
         this.load.image('thrall', 'antiplayer.png');
         this.load.image('pistol', 'pistol1.png');
+        this.load.image('bullet', 'bullet.png');
         
         // Loads animations
         this.load.spritesheet('player_right', 'player_right.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
@@ -30,6 +31,7 @@ class Level1 extends Phaser.Scene {
         });
         this.load.tilemapTiledJSON("platform_map", "tilemap01.json");
     }
+
 
     create(){
         // add a tilemap
@@ -51,6 +53,7 @@ class Level1 extends Phaser.Scene {
         keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         this.physics.world.setBounds(0, 0, game.config.width, game.config.height);
@@ -103,7 +106,13 @@ class Level1 extends Phaser.Scene {
         this.physics.add.collider(this.pistolPickup, groundLayer);
         this.physics.add.collider(this.antiPlayer, this.playerChar);
 
+        //this.physics.add.collider(this.bullet, groundLayer);
+        this.physics.add.overlap(groundLayer, this.bullet, (obj1, obj2) => {
+            obj2.destroy();
+        })
+
         this.physics.add.overlap(this.playerChar, this.pistolPickup, (obj1, obj2) => {
+            this.playerChar.itemStatus = 2;
             obj2.destroy();
         })
 
@@ -116,10 +125,41 @@ class Level1 extends Phaser.Scene {
     update(){
         this.playerChar.update();
         this.antiPlayer.update();
-        console.log(this.antiPlayer.y);
-        console.log(this.antiPlayer.x);
+        // console.log(this.antiPlayer.y);
+        // console.log(this.antiPlayer.x);
         if(this.antiPlayer.y == 208){
             //this.antiPlayerlayer.body.setVelocityX(-2);
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(keyF)){
+            switch (this.playerChar.itemStatus){
+                case 0: //nothing
+                    break;
+                case 1: //melee
+                    break;
+                case 2: //pistol
+                    this.bullet = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
+                    this.bullet.x = this.playerChar.x;
+                    this.bullet.y = this.playerChar.y;
+
+                    //this.bullet.body.setGravityY = 0;
+                    break;
+                case 3: //shotgun
+                    break;
+            }
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyX)){
+            
+            if (this.playerChar.itemStatus == 2){
+                this.pistolPickup = this.physics.add.sprite(50, 200, 'pistol');
+                this.pistolPickup.anims.play('pistol_anim');
+                this.pistolPickup.setScale(0.5);
+                //this.pistolPickup.height *= 2;
+                this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
+                this.pistolPickup.x = this.playerChar.x + 2;
+                this.pistolPickup.y = this.playerChar.y + 2;
+            }
+            this.playerChar.itemStatus = 0;
         }
     }
 }
