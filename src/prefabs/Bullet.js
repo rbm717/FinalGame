@@ -18,8 +18,9 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
 
 
     update() {
-
-
+        if(this.body.touching.right || this.body.touching.left){
+            this.destroy();
+        }
     }
 }
 

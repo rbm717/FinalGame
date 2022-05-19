@@ -1,5 +1,5 @@
 class Player extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame) {
+    constructor(scene, x, y, texture, frame, jumpSFX) {
         super(scene, x, y, texture, frame);
 
         // add object to existing scene
@@ -13,6 +13,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.itemStatus = 0;
         this.isAttacking;
         this.facingRight = true;
+        this.jumpSFX = jumpSFX
     }
 
 
@@ -41,27 +42,7 @@ class Player extends Phaser.GameObjects.Sprite {
         // Controls jumping
         if (this.body.blocked.down && Phaser.Input.Keyboard.JustDown(keyUp) && !this.isCrouching && !this.isAttacking) {
             this.body.setVelocityY(this.jumpForce);
-        }
-
-        // Sliding
-        if (Phaser.Input.Keyboard.JustDown(keyDown) && !this.isCrouching) {
-            this.isCrouching = true;
-            this.moveSpeed = this.crouchSpeed;
-            //this.anims.pause();
-            //this.setTexture('monster_slide', 0);
-            this.y = game.config.height - 30;
-            this.body.width = 110;
-            this.body.height = this.height/2;
-        }
-        // Stands player back up from crouching
-        if (Phaser.Input.Keyboard.JustUp(keyDown) && this.isCrouching) {
-            this.isCrouching = false;
-            this.moveSpeed = this.standSpeed;
-            //this.anims.play('walk');
-            this.body.width = this.width/2;
-            this.body.height = this.height/2;
-            this.y = game.config.height - 30;
-            this.x -= 20;
+            this.jumpSFX.play();
         }
     }
 
@@ -69,12 +50,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.isCrouching = false;
         this.x = 0; 
     }
-    
-    gainWeapon(weapon){
-        if(weapon == "pistol"){
-            this.hasPistol = true;
-        }
-    }
+
 }
 
 
