@@ -11,6 +11,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.jumpForce = -600;
         this.isCrouching = false;
         this.itemStatus = 0;
+        this.hasPistol = false;
         this.isAttacking;
     }
 
@@ -19,16 +20,24 @@ class Player extends Phaser.GameObjects.Sprite {
         // Left & right movement
         if (keyLEFT.isDown && !this.isAttacking){
             this.body.setVelocityX(0-this.moveSpeed);
-            this.anims.play('run_left');
+            this.play('run_left', true);
         }else if(keyRIGHT.isDown && !this.isAttacking){
+            this.play('run_right', true);
             this.body.setVelocityX(this.moveSpeed);
-            this.anims.play('run_right');
         }else{
             this.body.setVelocityX(0);
+            this.play('run_right', false);
+            this.play('run_left', false);
+        }
+
+        if(Phaser.Input.Keyboard.JustUp(keyLEFT)){
+            this.setTexture('player_idle_left');
+        }else if(Phaser.Input.Keyboard.JustUp(keyRIGHT)){
+            this.setTexture('player_idle_right');
         }
 
         // Controls jumping
-        if (this.body.touching.down && Phaser.Input.Keyboard.JustDown(keyUp) && !this.isCrouching && !isAttacking) {
+        if (this.body.blocked.down && Phaser.Input.Keyboard.JustDown(keyUp) && !this.isCrouching && !this.isAttacking) {
             this.body.setVelocityY(this.jumpForce);
         }
 
@@ -71,6 +80,12 @@ class Player extends Phaser.GameObjects.Sprite {
     reset() {
         this.isCrouching = false;
         this.x = 0; 
+    }
+
+    gainWeapon(weapon){
+        if(weapon == "pistol"){
+            this.hasPistol = true;
+        }
     }
 }
 

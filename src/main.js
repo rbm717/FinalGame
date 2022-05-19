@@ -3,7 +3,7 @@
 let config = {
     type: Phaser.AUTO,
     width: 640,
-    height: 480,
+    height: 320,
     // Sets the screen to automatically fit the display
     scale: {
         mode: Phaser.Scale.FIT,
