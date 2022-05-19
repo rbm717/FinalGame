@@ -69,7 +69,12 @@ class Player extends Phaser.GameObjects.Sprite {
         this.isCrouching = false;
         this.x = 0; 
     }
-
+    
+    gainWeapon(weapon){
+        if(weapon == "pistol"){
+            this.hasPistol = true;
+        }
+    }
 }
 
 
