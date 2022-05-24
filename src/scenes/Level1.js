@@ -51,6 +51,9 @@ class Level1 extends Phaser.Scene {
         const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
         const groundLayer = map.createLayer("Ground", tileset, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
+        this.bulletArray = [];
+        this.pickUpArray = [];
+        this.enemyArray = [];
 
         // Establishes keyboard input
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -139,6 +142,7 @@ class Level1 extends Phaser.Scene {
         this.pistolPickup.anims.play('pistol_anim');
         this.pistolPickup.setScale(0.5);
         this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
+        this.pickUpArray.push(this.pistolPickup);
 
         // Adds enemy to screen and scales size
         this.enemy1 = new Enemy(this, 170, 200, 'thrall', 0, 100, 180, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
@@ -150,39 +154,34 @@ class Level1 extends Phaser.Scene {
         this.enemy3 = new Enemy(this, 1000, 140, 'thrall', 0, 860, 1000, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
         this.enemy3.body.setSize(this.enemy3.width/2);
         this.enemy3.setScale(0.6);
-        this.enemies = this.add.group();
-        this.enemies.add(this.enemy1);
-        this.enemies.add(this.enemy2);
-        this.enemies.add(this.enemy3);
-        this.enemyArr = [this.enemy1, this.enemy2, this.enemy3];
+
+        this.enemyArray = [this.enemy1, this.enemy2, this.enemy3];
 
         // Enables collision with the ground layer of the map
         groundLayer.setCollisionByProperty({ 
             collides: true 
         });
         this.physics.add.collider(this.playerChar, groundLayer);
-        this.physics.add.collider(this.enemies, groundLayer);
-        this.physics.add.collider(this.pistolPickup, groundLayer);
-
-        this.physics.add.collider(this.enemies, this.playerChar, (enemy, player) => {
+        this.physics.add.collider(this.enemyArray, groundLayer);
+        this.physics.add.collider(this.pickUpArray, groundLayer);
+        this.physics.add.collider(this.bulletArray, groundLayer, (obj1, obj2) => {
+            obj1.destroy();
+        });
+        //this.physics.add.collider(this.bulletArray, this.antiPlayer);
+        this.physics.add.collider(this.enemyArray, this.playerChar, (enemy, player) => {
             // Note: Need to have it hurt player, maybe push them back?
             if(!this.thrallSFX.isPlaying){
                 this.thrallSFX.play();
             }
         });
 
-        this.bullets = this.add.group();
-        this.bulletArr = [];
-        this.physics.add.overlap(groundLayer, this.bullets, (obj1, obj2) => {
-            obj2.destroy();
-        })
-        this.physics.add.overlap(this.enemies, this.bullets, (obj1, obj2) => {
+        this.physics.add.overlap(this.enemyArray, this.bulletArray, (obj1, obj2) => {
             obj1.damage();
             obj2.destroy();
         })
 
         // Adds pistol to player inventory and destroys collectible
-        this.physics.add.overlap(this.playerChar, this.pistolPickup, (obj1, obj2) => {
+        this.physics.add.overlap(this.playerChar, this.pickUpArray, (obj1, obj2) => {
             this.playerChar.itemStatus = 2;
             obj2.destroy();
             this.gunSFX.play();
@@ -196,10 +195,10 @@ class Level1 extends Phaser.Scene {
 
     update(){
         this.playerChar.update();
-        this.enemyArr.forEach(element => {
+        this.enemyArray.forEach(element => {
             element.update();
         });
-        this.bulletArr.forEach(element => {
+        this.bulletArray.forEach(element => {
             element.update();
         });
         //console.log("(" + this.playerChar.x + ", " +this.playerChar.y + ")");
@@ -211,14 +210,13 @@ class Level1 extends Phaser.Scene {
                 case 1: //melee
                     break;
                 case 2: //pistol
-                    // Note: still need to get bullet collision working
-                     this.bullet = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
-                    // this.bullets.add(this.bullet);
-                    //this.bullets.create(new Bullet(this, this.playerChar.x, this.playerChar.y, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0));
-                     this.bullet.x = this.playerChar.x;
-                     this.bullet.y = this.playerChar.y;
-                     this.bulletArr.push(this.bullet);
-                     this.shootSFX.play();
+                    this.bullet = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
+                    this.bullet.x = this.playerChar.x;
+                    this.bullet.y = this.playerChar.y;
+                    this.bulletArray.push(this.bullet);
+                    this.shootSFX.play();
+
+                    //this.bullet.body.setGravityY = 0;
                     break;
                 case 3: //shotgun
                     break;
@@ -232,8 +230,9 @@ class Level1 extends Phaser.Scene {
                 this.pistolPickup.setScale(0.5);
                 //this.pistolPickup.height *= 2;
                 this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
-                this.pistolPickup.x = this.playerChar.x + 2;
-                this.pistolPickup.y = this.playerChar.y + 2;
+                this.pistolPickup.x = this.playerChar.x + 4;
+                this.pistolPickup.y = this.playerChar.y + 4;
+                this.pickUpArray.push(this.pistolPickup);
             }
             this.playerChar.itemStatus = 0;
         }
