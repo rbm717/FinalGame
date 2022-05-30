@@ -12,6 +12,7 @@ class Level1 extends Phaser.Scene {
         this.load.image('player_idle_right', 'playerIdleRight.png');
         this.load.image('thrall', 'thrall.png');
         this.load.image('pistol', 'pistol1.png');
+        this.load.image('shotgun', 'shotgun1.png');
         this.load.image('bullet', 'bullet.png');
         
         // Loads animations
@@ -40,6 +41,12 @@ class Level1 extends Phaser.Scene {
         this.load.audio('jump_sfx', 'jump_sfx.wav');
         this.load.audio('shoot_sfx', 'shoot_sfx.ogg');
         this.load.audio('thrall_sfx', 'zombie_sfx.wav');
+
+        this.load.audio('shotgun_sfx', 'shotgun.wav');
+        this.load.audio('roar_sfx', 'roar.wav');
+        this.load.audio('metal_sfx', 'metalenemy.wav');
+        this.load.audio('cocking_sfx', 'cocking.wav');
+        this.load.audio('bat_sfx', 'bat.wav');
     }
 
     create(){
@@ -52,7 +59,8 @@ class Level1 extends Phaser.Scene {
         const groundLayer = map.createLayer("Ground", tileset, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
         this.bulletArray = [];
-        this.pickUpArray = [];
+        this.pistolArray = [];
+        this.shotgunArray = [];
         this.enemyArray = [];
 
         // Establishes keyboard input
@@ -129,6 +137,27 @@ class Level1 extends Phaser.Scene {
             loop: false
         });
 
+        this.roarSFX = this.sound.add('roar_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.shotgunSFX = this.sound.add('shotgun_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.batSFX = this.sound.add('bat_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.cockingSFX = this.sound.add('cocking_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.metalSFX = this.sound.add('metal_sfx', {
+            volume: 1,
+            loop: false
+        });
+
         // Instantiates player character
         this.playerChar = new Player(this, 100, 100, 'player', 0, this.jumpSFX).setOrigin(0,0);
         this.physics.world.enable(this.playerChar);
@@ -142,7 +171,14 @@ class Level1 extends Phaser.Scene {
         this.pistolPickup.anims.play('pistol_anim');
         this.pistolPickup.setScale(0.5);
         this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
-        this.pickUpArray.push(this.pistolPickup);
+        this.pistolArray.push(this.pistolPickup);
+
+        // Creates shotgun collectible item in game world
+        this.shotgunPickup = this.physics.add.sprite(80, 200, 'shotgun');
+        //this.pistolPickup.anims.play('pistol_anim');
+        this.shotgunPickup.setScale(0.5);
+        this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
+        this.shotgunArray.push(this.shotgunPickup);
 
         // Adds enemy to screen and scales size
         this.enemy1 = new Enemy(this, 170, 200, 'thrall', 0, 100, 180, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
@@ -163,7 +199,7 @@ class Level1 extends Phaser.Scene {
         });
         this.physics.add.collider(this.playerChar, groundLayer);
         this.physics.add.collider(this.enemyArray, groundLayer);
-        this.physics.add.collider(this.pickUpArray, groundLayer);
+        this.physics.add.collider(this.pistolArray, groundLayer);
         this.physics.add.collider(this.bulletArray, groundLayer, (obj1, obj2) => {
             obj1.destroy();
         });
@@ -181,8 +217,14 @@ class Level1 extends Phaser.Scene {
         })
 
         // Adds pistol to player inventory and destroys collectible
-        this.physics.add.overlap(this.playerChar, this.pickUpArray, (obj1, obj2) => {
+        this.physics.add.overlap(this.playerChar, this.pistolArray, (obj1, obj2) => {
             this.playerChar.itemStatus = 2;
+            obj2.destroy();
+            this.gunSFX.play();
+        })
+
+        this.physics.add.overlap(this.playerChar, this.shotgunArray, (obj1, obj2) => {
+            this.playerChar.itemStatus = 3;
             obj2.destroy();
             this.gunSFX.play();
         })
@@ -219,20 +261,44 @@ class Level1 extends Phaser.Scene {
                     //this.bullet.body.setGravityY = 0;
                     break;
                 case 3: //shotgun
+                    this.bullet = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
+                    this.bullet.x = this.playerChar.x;
+                    this.bullet.y = this.playerChar.y;
+                    this.bulletArray.push(this.bullet);
+
+
+                    this.bullet1 = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
+                    this.bullet1.x = this.playerChar.x;
+                    this.bullet1.y = this.playerChar.y + 5;
+                    this.bulletArray.push(this.bullet1);
+
+
+                    this.bullet2 = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
+                    this.bullet2.x = this.playerChar.x;
+                    this.bullet2.y = this.playerChar.y - 5;
+                    this.bulletArray.push(this.bullet2);
+                    this.shotgunSFX.play();
                     break;
             }
         }
         if (Phaser.Input.Keyboard.JustDown(keyX)){
 
             if (this.playerChar.itemStatus == 2){
-                this.pistolPickup = this.physics.add.sprite(50, 200, 'pistol');
+                this.pistolPickup = this.physics.add.sprite(this.playerChar.x + 4, this.playerChar.y + 40, 'pistol');
                 this.pistolPickup.anims.play('pistol_anim');
                 this.pistolPickup.setScale(0.5);
                 //this.pistolPickup.height *= 2;
                 this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
-                this.pistolPickup.x = this.playerChar.x + 4;
-                this.pistolPickup.y = this.playerChar.y + 4;
-                this.pickUpArray.push(this.pistolPickup);
+                this.pistolArray.push(this.pistolPickup);
+            }
+            else if (this.playerChar.itemStatus == 3){
+                this.shotgunPickup = this.physics.add.sprite(this.playerChar.x + 4, this.playerChar.y + 14, 'shotgun');
+                //this.shotgunPickup.anims.play('pistol_anim');
+                this.shotgunPickup.setScale(0.5);
+                //this.pistolPickup.height *= 2;
+                this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
+                this.shotgunArray.push(this.shotgunPickup);
+
             }
             this.playerChar.itemStatus = 0;
         }

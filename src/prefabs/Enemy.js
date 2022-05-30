@@ -25,6 +25,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(){
+        if(this.hp <= 0){
+            this.destroy();
+        }
         if (this.x < this.leftBound && this.body.velocity.x < 0) {
             this.body.setVelocityX(this.moveSpeed);
             this.anims.play(this.rightAnim);
@@ -33,9 +36,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.anims.play(this.leftAnim);
         }
 
-        if(this.hp <= 0){
-            this.destroy();
-        }
+  
     }
 
     damage(){
