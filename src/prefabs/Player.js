@@ -4,6 +4,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
         // add object to existing scene
         scene.add.existing(this);
+        this.hp = 5;
         this.moveSpeed = 200;
         this.moveSpeedBackup = this.moveSpeed;
         this.standSpeed = this.moveSpeed;
@@ -18,6 +19,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
 
     update() {
+        if(this.hp <= 0){
+            this.scene.start('level1');
+            return;
+        }
         // Left & right movement
         if (keyLEFT.isDown && !this.isAttacking){
             this.facingRight = false;
@@ -83,6 +88,11 @@ class Player extends Phaser.GameObjects.Sprite {
     reset() {
         this.isCrouching = false;
         this.x = 0; 
+    }
+
+    damage(){
+        this.hp--;
+        //console.log("HP: " + this.hp);
     }
 
 }
