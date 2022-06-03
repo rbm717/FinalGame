@@ -27,6 +27,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     update(){
         if(this.hp <= 0){
             this.destroy();
+            return;
         }
         if (this.x < this.leftBound && this.body.velocity.x < 0) {
             this.body.setVelocityX(this.moveSpeed);

@@ -22,11 +22,28 @@ class Player extends Phaser.GameObjects.Sprite {
         if (keyLEFT.isDown && !this.isAttacking){
             this.facingRight = false;
             this.body.setVelocityX(0-this.moveSpeed);
-            this.play('run_left', true);
+            if (this.itemStatus == 0){
+                this.play('run_left', true);
+            }
+            else if (this.itemStatus == 2){
+                this.play('run_left_gun', true);
+            }
+            else if (this.itemStatus == 3){
+                this.play('run_left_shotgun', true);
+            }
+            
         }else if(keyRIGHT.isDown && !this.isAttacking){
             this.facingRight = true;
-            this.play('run_right', true);
             this.body.setVelocityX(this.moveSpeed);
+            if (this.itemStatus == 0){
+                this.play('run_right', true);
+            }
+            else if (this.itemStatus == 2){
+                this.play('run_right_gun', true);
+            }
+            else if (this.itemStatus == 3){
+                this.play('run_right_shotgun', true);
+            }
         }else{
             this.body.setVelocityX(0);
             this.play('run_right', false);
@@ -34,9 +51,26 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         if(this.body.velocity.x == 0 && !this.facingRight){
-            this.setTexture('player_idle_left');
+            if (this.itemStatus == 2){
+                this.setTexture('player_idle_left_gun');
+            }
+            else if (this.itemStatus == 3){
+                this.setTexture('player_idle_left_shotgun');
+            }
+            else {
+                this.setTexture('player_idle_left');
+            }
+            
         }else if(this.body.velocity.x == 0 && this.facingRight){
-            this.setTexture('player_idle_right');
+            if (this.itemStatus == 2){
+                this.setTexture('player_idle_right_gun');
+            }
+            else if (this.itemStatus == 3){
+                this.setTexture('player_idle_right_shotgun');
+            }
+            else {
+                this.setTexture('player_idle_right');
+            }
         }
 
         // Controls jumping
