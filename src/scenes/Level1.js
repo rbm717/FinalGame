@@ -46,8 +46,8 @@ class Level1 extends Phaser.Scene {
         this.load.spritesheet('werewolf_left', 'werewolf_left.png', {frameWidth: 61, frameHeight: 66, startFrame: 0, endFrame: 3});
         this.load.spritesheet('werewolf_right', 'werewolf_right.png', {frameWidth: 61, frameHeight: 66, startFrame: 0, endFrame: 3});
 
-        this.load.spritesheet('metal_left', 'armor_left.png', {frameWidth: 34, frameHeight: 76, startFrame: 0, endFrame: 3});
-        this.load.spritesheet('metal_right', 'armor_right.png', {frameWidth: 34, frameHeight: 76, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('metal_left', 'armor_left.png', {frameWidth: 35.75, frameHeight: 76, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('metal_right', 'armor_right.png', {frameWidth: 35.75, frameHeight: 76, startFrame: 0, endFrame: 3});
 
         // Temporary, replace with finalized assets
         this.load.image("1bit_tiles", "colored_packed.png");
@@ -179,13 +179,13 @@ class Level1 extends Phaser.Scene {
         this.anims.create({
             key: 'metal_left_anim',
             frames: this.anims.generateFrameNumbers('metal_left', { start: 0, end: 3, first: 0}),
-            frameRate: 10,
+            frameRate: 3.5,
             repeat: -1
         });
         this.anims.create({
             key: 'metal_right_anim',
             frames: this.anims.generateFrameNumbers('metal_right', { start: 0, end: 3, first: 0}),
-            frameRate: 10,
+            frameRate: 3.5,
             repeat: -1
         });
 
@@ -262,7 +262,7 @@ class Level1 extends Phaser.Scene {
         this.enemy1.body.setSize(this.enemy1.width/2);
         this.enemy1.setScale(0.6);
 
-        this.enemy2 = new Enemy(this, 480, 200, 'thrall', 0, 500, 540, 6, 80, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
+        this.enemy2 = new Enemy(this, 480, 200, 'thrall', 0, 500, 540, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
         this.enemy2.body.setSize(this.enemy2.width/2);
         this.enemy2.setScale(0.6);
 
@@ -371,7 +371,7 @@ class Level1 extends Phaser.Scene {
                 case 2: //pistol
                     this.bullet = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
                     this.bullet.x = this.playerChar.x;
-                    this.bullet.y = this.playerChar.y;
+                    this.bullet.y = this.playerChar.y+15;
                     this.bulletArray.push(this.bullet);
                     this.shootSFX.play();
 
