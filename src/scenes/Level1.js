@@ -51,6 +51,11 @@ class Level1 extends Phaser.Scene {
 
         // Temporary, replace with finalized assets
         this.load.image("1bit_tiles", "colored_packed.png");
+
+        this.load.image("background", "backgroundvamp.png");
+        
+       
+       
         this.load.spritesheet("kenney_sheet", "colored_transparent_packed.png", {
             frameWidth: 16,
             frameHeight: 16
@@ -76,6 +81,8 @@ class Level1 extends Phaser.Scene {
         const map = this.add.tilemap("platform_map");
         // add a tileset to the map
         const tileset = map.addTilesetImage("colored_packed", "1bit_tiles");
+        const bg = map.addTilesetImage("BGvamp", "background");
+       
         // create tilemap layers
         const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
         const groundLayer = map.createLayer("Ground", tileset, 0, 0);
