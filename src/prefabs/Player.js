@@ -20,7 +20,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update() {
         if(this.hp <= 0){
-            this.scene.start('level1');
+            this.scene.start('EndingScene');
             return;
         }
         // Left & right movement
