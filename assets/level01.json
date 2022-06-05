@@ -217,9 +217,9 @@
          "firstgid":136,
          "grid":
             {
-             "height":3,
+             "height":1,
              "orientation":"orthogonal",
-             "width":3
+             "width":1
             },
          "image":"spritesheet.png",
          "imageheight":144,

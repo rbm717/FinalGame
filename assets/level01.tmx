@@ -37,7 +37,7 @@
   </tile>
  </tileset>
  <tileset firstgid="136" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="24" columns="3">
-  <grid orientation="orthogonal" width="3" height="3"/>
+  <grid orientation="orthogonal" width="1" height="1"/>
   <image source="spritesheet.png" width="96" height="144"/>
  </tileset>
  <tileset firstgid="160" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="4" columns="2">
