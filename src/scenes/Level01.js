@@ -88,8 +88,22 @@ class Level01 extends Phaser.Scene {
         // create tilemap layers
         const backgroundLayer = map.createLayer("Background", bg, 0, 0);
         //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
-        const groundLayer = map.createLayer("Floor", bg, 0, 0);
+        const groundLayer = map.createLayer("Floor", tileset, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
+        this.coins = map.createFromObjects("Objects", {
+            name: "Coin",
+            key: "Coin",
+            frame: 0
+        });
+        this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
+        this.coinGroup = this.add.group(this.coins);
+        this.dudes = map.createFromObjects("Objects", {
+            name: "The Dude",
+            key: "The Dude",
+            frame: 1
+        });
+        this.physics.world.enable(this.dudes, Phaser.Physics.Arcade.STATIC_BODY);
+        this.dudeGroup = this.add.group(this.dudes);
         this.bulletArray = [];
         this.pistolArray = [];
         this.shotgunArray = [];
