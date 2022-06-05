@@ -80,15 +80,15 @@ class Level01 extends Phaser.Scene {
         // add a tilemap
         const map = this.add.tilemap("platform_map");
         // add a tileset to the map
-        const tileset = map.addTilesetImage("spritesheet", "1bit_tiles");
-        //const bg = map.addTilesetImage("BGvamp", "background");
+        const tileset = map.addTilesetImage("BasicStuff", "1bit_tiles");
+        const bg = map.addTilesetImage("BGvamp", "background");
        
         //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
 
         // create tilemap layers
-        const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
+        const backgroundLayer = map.createLayer("Background", bg, 0, 0);
         //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
-        const groundLayer = map.createLayer("Floor", tileset, 0, 0);
+        const groundLayer = map.createLayer("Floor", bg, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
         this.bulletArray = [];
         this.pistolArray = [];
