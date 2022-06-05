@@ -32,11 +32,11 @@ class Level1 extends Phaser.Scene {
         this.load.spritesheet('pistol_hover', 'pistol.png', {frameWidth: 33, frameHeight: 18, startFrame: 0, endFrame: 3});
 
 
-        this.load.spritesheet('player_right_shotgun', 'player_right_shotgun.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
-        this.load.spritesheet('player_left_shotgun', 'player_left_shotgun.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('player_right_shotgun', 'player_right_shotgun.png', {frameWidth: 53.75, frameHeight: 66, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('player_left_shotgun', 'player_left_shotgun.png', {frameWidth: 53.75, frameHeight: 66, startFrame: 0, endFrame: 3});
 
-        this.load.spritesheet('player_right_knife', 'player_right_knife.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
-        this.load.spritesheet('player_left_knife', 'player_left_knife.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('player_right_knife', 'player_right_knife.png', {frameWidth: 74, frameHeight: 64, startFrame: 0, endFrame: 2});
+        this.load.spritesheet('player_left_knife', 'player_left_knife.png', {frameWidth: 74, frameHeight: 64, startFrame: 0, endFrame: 2});
 
 
         // Thrall
@@ -83,6 +83,8 @@ class Level1 extends Phaser.Scene {
         const tileset = map.addTilesetImage("colored_packed", "1bit_tiles");
         const bg = map.addTilesetImage("BGvamp", "background");
        
+        //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
+
         // create tilemap layers
         const backgroundLayer = map.createLayer("Background", tileset, 0, 0);
         const groundLayer = map.createLayer("Ground", tileset, 0, 0);
@@ -352,6 +354,8 @@ class Level1 extends Phaser.Scene {
     }
 
     update(){
+        //this.backVamp.tilePostionX -= 2;
+
         this.playerChar.update();
         this.enemyArray.forEach(element => {
             element.update();
