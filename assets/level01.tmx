@@ -6,43 +6,9 @@
  <tileset firstgid="1" name="BGvamp" tilewidth="32" tileheight="32" tilecount="126" columns="14">
   <image source="backgroundvamp.png" width="448" height="288"/>
  </tileset>
- <tileset firstgid="127" name="BaseStuff" tilewidth="64" tileheight="64" tilecount="9" columns="0">
-  <grid orientation="orthogonal" width="1" height="1"/>
-  <tile id="0">
-   <image width="40" height="40" source="../../../Downloads/Webp.net-resizeimage.png"/>
-  </tile>
-  <tile id="1">
-   <image width="64" height="64" source="../../../Downloads/floortile.png"/>
-  </tile>
-  <tile id="2">
-   <image width="64" height="32" source="../../Books1.png"/>
-  </tile>
-  <tile id="3">
-   <image width="30" height="23" source="../../gem.png"/>
-  </tile>
-  <tile id="4">
-   <image width="64" height="64" source="../../CMPM120_EndlessRunner-main/bottle_1.png"/>
-  </tile>
-  <tile id="5">
-   <image width="33" height="18" source="pistol1.png"/>
-  </tile>
-  <tile id="6">
-   <image width="38" height="7" source="shotgun1.png"/>
-  </tile>
-  <tile id="7">
-   <image width="40" height="50" source="../../villager.png"/>
-  </tile>
-  <tile id="8">
-   <image width="55" height="64" source="antiplayer.png"/>
-  </tile>
- </tileset>
- <tileset firstgid="136" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="24" columns="3">
+ <tileset firstgid="127" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="24" columns="3">
   <grid orientation="orthogonal" width="1" height="1"/>
   <image source="spritesheet.png" width="96" height="144"/>
- </tileset>
- <tileset firstgid="160" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <grid orientation="orthogonal" width="4" height="2"/>
-  <image source="spritesheet (1).png" width="65" height="82"/>
  </tileset>
  <layer id="1" name="Background" width="28" height="9">
   <data encoding="csv">
@@ -64,9 +30,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,139,139,139,139,139,139,139,139,0,0,0,
-0,0,0,0,0,0,127,0,0,0,0,0,0,0,0,0,139,139,139,139,139,139,139,139,139,140,0,0,
-0,0,0,0,0,127,127,127,0,0,0,0,0,0,0,139,139,139,139,139,139,139,139,139,139,143,140,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,130,130,130,130,130,130,130,130,0,0,0,
+0,0,0,0,0,133,133,0,0,0,0,0,0,0,0,0,130,130,130,130,130,130,130,130,130,131,0,0,
+0,0,0,0,133,133,133,133,0,0,0,0,0,0,0,130,130,130,130,130,130,130,130,130,130,134,131,0,
 1,2,3,10,10,6,7,8,10,10,11,12,13,14,1,7,3,4,5,6,7,8,9,10,11,12,13,14
 </data>
  </layer>
@@ -76,17 +42,15 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,142,142,142,142,142,142,142,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,142,142,142,142,142,142,142,142,0,0,0,
-144,0,0,0,0,0,0,0,144,0,0,0,0,0,0,144,142,142,142,142,142,142,142,142,142,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,135,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,135,133,133,133,133,133,133,133,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,0,0,0,
+135,0,0,0,0,0,0,0,135,0,0,0,0,0,0,135,133,133,133,133,133,133,133,133,133,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup id="5" name="Objects">
-  <object id="16" name="Coin" type="Coin" gid="136" x="355.333" y="254.667" width="24" height="22.6667"/>
-  <object id="19" name="Coin" type="Coin" gid="160" x="97.3333" y="253.333" width="24" height="22.6667"/>
-  <object id="20" name="Coin" type="Coin" gid="160" x="677.333" y="158.667" width="24" height="22.6667"/>
-  <object id="23" name="The Dude" gid="138" x="864" y="255.333" width="32" height="32"/>
+  <object id="16" name="Coin" type="Coin" gid="127" x="355.333" y="254.667" width="24" height="22.6667"/>
+  <object id="23" name="The Dude" gid="129" x="864" y="255.333" width="32" height="32"/>
  </objectgroup>
 </map>
