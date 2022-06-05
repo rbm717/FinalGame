@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="28" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="23">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="28" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="24">
+ <editorsettings>
+  <export target="level01.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" name="BGvamp" tilewidth="32" tileheight="32" tilecount="126" columns="14">
   <image source="backgroundvamp.png" width="448" height="288"/>
  </tileset>
@@ -33,11 +36,11 @@
    <image width="55" height="64" source="antiplayer.png"/>
   </tile>
  </tileset>
- <tileset firstgid="136" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="12" columns="2">
-  <grid orientation="orthogonal" width="4" height="2"/>
-  <image source="spritesheet (1).png" width="65" height="82"/>
+ <tileset firstgid="136" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="24" columns="3">
+  <grid orientation="orthogonal" width="5" height="1"/>
+  <image source="spritesheet.png" width="96" height="144"/>
  </tileset>
- <tileset firstgid="148" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+ <tileset firstgid="160" name="BasicStuff" tilewidth="32" tileheight="32" tilecount="4" columns="2">
   <grid orientation="orthogonal" width="4" height="2"/>
   <image source="spritesheet (1).png" width="65" height="82"/>
  </tileset>
@@ -61,10 +64,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,138,138,138,138,138,138,138,138,0,0,0,
-0,0,0,0,0,0,127,0,0,0,0,0,0,0,0,0,138,138,138,138,138,138,138,138,138,0,0,0,
-0,0,0,0,0,127,127,127,0,0,0,0,0,0,0,138,138,138,138,138,138,138,138,138,138,139,139,0,
-1,2,3,10,10,6,7,8,10,10,11,12,13,14,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,139,139,139,139,139,139,139,139,0,0,0,
+0,0,0,0,0,0,127,0,0,0,0,0,0,0,0,0,139,139,139,139,139,139,139,139,139,140,0,0,
+0,0,0,0,0,127,127,127,0,0,0,0,0,0,0,139,139,139,139,139,139,139,139,139,139,143,140,0,
+1,2,3,10,10,6,7,8,10,10,11,12,13,14,1,7,3,4,5,6,7,8,9,10,11,12,13,14
 </data>
  </layer>
  <layer id="4" name="Scenery" width="28" height="9">
@@ -73,17 +76,17 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,142,142,142,142,142,142,142,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,142,142,142,142,142,142,142,142,0,0,0,
+144,0,0,0,0,0,0,0,144,0,0,0,0,0,0,144,142,142,142,142,142,142,142,142,142,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup id="5" name="Objects">
   <object id="16" name="Coin" type="Coin" gid="136" x="355.333" y="254.667" width="24" height="22.6667"/>
-  <object id="19" name="Coin" type="Coin" gid="148" x="97.3333" y="253.333" width="24" height="22.6667"/>
-  <object id="20" name="Coin" type="Coin" gid="148" x="677.333" y="158.667" width="24" height="22.6667"/>
-  <object id="21" name="The Dude" gid="137" x="862.667" y="258.667" width="32" height="32"/>
+  <object id="19" name="Coin" type="Coin" gid="160" x="97.3333" y="253.333" width="24" height="22.6667"/>
+  <object id="20" name="Coin" type="Coin" gid="160" x="677.333" y="158.667" width="24" height="22.6667"/>
+  <object id="23" name="The Dude" gid="138" x="864" y="255.333" width="32" height="32"/>
  </objectgroup>
 </map>
