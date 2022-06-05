@@ -5287,10 +5287,12 @@
   </tile>
  </tileset>
  <tileset firstgid="1057" name="floortile_converted" tilewidth="32" tileheight="32" tilecount="18" columns="6">
+  <grid orientation="orthogonal" width="16" height="16"/>
   <image source="floortile_converted.png" width="192" height="96"/>
  </tileset>
- <tileset firstgid="1075" name="BGvamp" tilewidth="16" tileheight="16" tilecount="448" columns="28">
-  <image source="backgroundvamp.png" width="448" height="265"/>
+ <tileset firstgid="1075" name="BGvamp" tilewidth="16" tileheight="16" tilecount="476" columns="28">
+  <grid orientation="orthogonal" width="32" height="32"/>
+  <image source="backgroundvamp.png" width="448" height="272"/>
  </tileset>
  <layer id="1" name="Background" width="100" height="20">
   <data encoding="csv">
