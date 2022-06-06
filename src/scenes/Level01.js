@@ -90,20 +90,6 @@ class Level01 extends Phaser.Scene {
         //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
         const groundLayer = map.createLayer("Floor", tileset, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
-        this.coins = map.createFromObjects("Objects", {
-            name: "Coin",
-            key: "Coin",
-            frame: 0
-        });
-        this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
-        this.coinGroup = this.add.group(this.coins);
-        this.dudes = map.createFromObjects("Objects", {
-            name: "The Dude",
-            key: "The Dude",
-            frame: 1
-        });
-        this.physics.world.enable(this.dudes, Phaser.Physics.Arcade.STATIC_BODY);
-        this.dudeGroup = this.add.group(this.dudes);
         this.bulletArray = [];
         this.pistolArray = [];
         this.shotgunArray = [];
@@ -282,11 +268,11 @@ class Level01 extends Phaser.Scene {
         this.shotgunArray.push(this.shotgunPickup);
 
         // Adds enemy to screen and scales size
-        this.enemy1 = new Enemy(this, 170, 200, 'thrall', 0, 100, 180, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
+        this.enemy1 = new Enemy(this, 290, 220, 'thrall', 0, 290, 450, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
         this.enemy1.body.setSize(this.enemy1.width/2);
         this.enemy1.setScale(0.6);
 
-        this.enemy2 = new Enemy(this, 480, 200, 'thrall', 0, 500, 540, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
+        this.enemy2 = new Enemy(this, 590, 120, 'thrall', 0, 590, 750, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
         this.enemy2.body.setSize(this.enemy2.width/2);
         this.enemy2.setScale(0.6);
 
@@ -425,7 +411,7 @@ class Level01 extends Phaser.Scene {
             }
         }
         if (Phaser.Input.Keyboard.JustDown(keyX)){
-
+            console.log(this.playerChar.x + ", " + this.playerChar.y);
             //dropping is TOO buggy
 
             // if (this.playerChar.itemStatus == 2){
