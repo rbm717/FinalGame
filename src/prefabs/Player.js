@@ -8,69 +8,81 @@ class Player extends Phaser.GameObjects.Sprite {
         this.moveSpeed = 200;
         this.moveSpeedBackup = this.moveSpeed;
         this.standSpeed = this.moveSpeed;
-        this.crouchSpeed = this.moveSpeed/2;
+        this.crouchSpeed = this.moveSpeed / 2;
         this.jumpForce = -600;
         this.isCrouching = false;
         this.itemStatus = 0;
         this.isAttacking;
         this.facingRight = true;
         this.jumpSFX = jumpSFX
+        this.isStabbing = false;
     }
 
 
     update() {
+        console.log(this.isStabbing);
         // Left & right movement
-        if (keyLEFT.isDown && !this.isAttacking){
+        if (keyLEFT.isDown && !this.isAttacking) {
             this.facingRight = false;
-            this.body.setVelocityX(0-this.moveSpeed);
-            if (this.itemStatus == 0){
-                this.play('run_left', true);
+            this.body.setVelocityX(0 - this.moveSpeed);
+            if (!this.isStabbing) {
+                if (this.itemStatus == 0) {
+                    this.play('run_left', true);
+                }
+                else if (this.itemStatus == 2) {
+                    this.play('run_left_gun', true);
+                }
+                else if (this.itemStatus == 3) {
+                    this.play('run_left_shotgun', true);
+                }
             }
-            else if (this.itemStatus == 2){
-                this.play('run_left_gun', true);
-            }
-            else if (this.itemStatus == 3){
-                this.play('run_left_shotgun', true);
-            }
-            
-        }else if(keyRIGHT.isDown && !this.isAttacking){
+
+        } else if (keyRIGHT.isDown && !this.isAttacking) {
             this.facingRight = true;
             this.body.setVelocityX(this.moveSpeed);
-            if (this.itemStatus == 0){
-                this.play('run_right', true);
+            if (!this.isStabbing) {
+                if (this.itemStatus == 0) {
+                    this.play('run_right', true);
+                }
+                else if (this.itemStatus == 2) {
+                    this.play('run_right_gun', true);
+                }
+                else if (this.itemStatus == 3) {
+                    this.play('run_right_shotgun', true);
+                }
             }
-            else if (this.itemStatus == 2){
-                this.play('run_right_gun', true);
-            }
-            else if (this.itemStatus == 3){
-                this.play('run_right_shotgun', true);
-            }
-        }else{
+        } else {
             this.body.setVelocityX(0);
+            if (!this.isStabbing ){
             this.play('run_right', false);
             this.play('run_left', false);
+            }
         }
 
-        if(this.body.velocity.x == 0 && !this.facingRight){
-            if (this.itemStatus == 2){
-                this.setTexture('player_idle_left_gun');
+        if (this.body.velocity.x == 0 && !this.facingRight) {
+            if (!this.isStabbing) {
+                if (this.itemStatus == 2) {
+                    this.setTexture('player_idle_left_gun');
+                }
+                else if (this.itemStatus == 3) {
+                    this.setTexture('player_idle_left_shotgun');
+                }
+                else {
+                    this.setTexture('player_idle_left');
+                }
             }
-            else if (this.itemStatus == 3){
-                this.setTexture('player_idle_left_shotgun');
-            }
-            else {
-                this.setTexture('player_idle_left');
-            }
-            
-        }else if(this.body.velocity.x == 0 && this.facingRight){
-            if (this.itemStatus == 2){
-                this.setTexture('player_idle_right_gun');
-            }
-            else if (this.itemStatus == 3){
-                this.setTexture('player_idle_right_shotgun');
-            }
-            else {
-                this.setTexture('player_idle_right');
+
+        } else if (this.body.velocity.x == 0 && this.facingRight) {
+            if (!this.isStabbing) {
+                if (this.itemStatus == 2) {
+                    this.setTexture('player_idle_right_gun');
+                }
+                else if (this.itemStatus == 3) {
+                    this.setTexture('player_idle_right_shotgun');
+                }
+                else {
+                    this.setTexture('player_idle_right');
+                }
             }
         }
 
@@ -83,10 +95,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
     reset() {
         this.isCrouching = false;
-        this.x = 0; 
+        this.x = 0;
     }
 
-    damage(){
+    damage() {
         this.hp--;
         //console.log("HP: " + this.hp);
     }

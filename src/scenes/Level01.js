@@ -426,6 +426,8 @@ class Level01 extends Phaser.Scene {
         // sets up timer for knife attacks
         this.timer = 0;
         this.delay = 500;
+
+        this.stabTimer = 0;
     }
 
     update(time, delta){
@@ -433,6 +435,7 @@ class Level01 extends Phaser.Scene {
             this.scene.start('EndingScene');
             return;
         }
+
         // Updates player and enemy positions
         this.playerChar.update();
         this.thrallArray.forEach(element => {
@@ -450,24 +453,38 @@ class Level01 extends Phaser.Scene {
         
         // Updates melee timer and resets melee hit box
         this.timer += delta;
+        this.stabTimer += delta;
         while (this.timer > this.delay) {
             this.timer -= this.delay;
             this.melee.x = -100;
+            
+            
+        }
+
+        if (this.playerChar.isStabbing && this.stabTimer > this.stabTime + 800){
+            this.playerChar.isStabbing = false;
+            //this.playerChar.anims.stop();
+            console.log("timer");
         }
 
         // Attacks
         if (Phaser.Input.Keyboard.JustDown(keyF)){
             switch (this.playerChar.itemStatus){
                 case 0: //melee
+                    console.log(this.stabTimer);
+                    this.stabTime = this.stabTimer;
+                    this.playerChar.isStabbing = true;
                     this.melee.y = this.playerChar.y+15;
                     if(this.playerChar.facingRight){
                         this.melee.x = this.playerChar.x+30;
                         if(this.playerChar.anims.currentAnim.key != 'stab_right_knife'){
-                            this.playerChar.play('stab_right_knife', true);
+                            this.playerChar.play('stab_right_knife');
+                            console.log("stabright");
                         }
                     }else{
                         this.melee.x = this.playerChar.x-5;
                         this.playerChar.anims.play('stab_left_knife');
+                        console.log("stableft");
                     }
                     break;
                 case 1: //nothing
@@ -501,6 +518,7 @@ class Level01 extends Phaser.Scene {
                     this.shotgunSFX.play();
                     break;
             }
+
         }
         if (Phaser.Input.Keyboard.JustDown(keyX)){
             console.log(this.playerChar.x + ", " + this.playerChar.y);
