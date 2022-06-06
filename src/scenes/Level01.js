@@ -15,7 +15,6 @@ class Level01 extends Phaser.Scene {
         this.load.image('player_idle_left_shotgun', 'playerIdleLeftShotgun.png');
         this.load.image('player_idle_right_shotgun', 'playerIdleRightShotgun.png');
 
-
         this.load.image('thrall', 'thrall.png');
         this.load.image('pistol', 'pistol1.png');
         this.load.image('shotgun', 'shotgun1.png');
@@ -109,6 +108,7 @@ class Level01 extends Phaser.Scene {
         keyX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        // Establishes bounds and gravity of level
         this.physics.world.setBounds(0, 0, 1600, game.config.height);
         this.gravity = 1500;
 
@@ -138,7 +138,6 @@ class Level01 extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
         this.anims.create({
             key: 'run_right_shotgun',
             frames: this.anims.generateFrameNumbers('player_right_shotgun', { start: 0, end: 3, first: 0}),
@@ -151,13 +150,25 @@ class Level01 extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
+        this.anims.create({
+            key: 'stab_right_knife',
+            frames: this.anims.generateFrameNumbers('player_right_knife', { start: 0, end: 2, first: 0}),
+            frameRate: 3.5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'stab_left_knife',
+            frames: this.anims.generateFrameNumbers('player_left_knife', { start: 0, end: 2, first: 0}),
+            frameRate: 3.5,
+            repeat: -1
+        });
         this.anims.create({
             key: 'pistol_anim',
             frames: this.anims.generateFrameNumbers('pistol_hover', { start: 0, end: 3, first: 0}),
             frameRate: 10,
             repeat: -1
         });
+
         this.anims.create({
             key: 'thrall_left_anim',
             frames: this.anims.generateFrameNumbers('thrall_left', { start: 0, end: 3, first: 0}),
@@ -170,7 +181,6 @@ class Level01 extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
         this.anims.create({
             key: 'werewolf_left_anim',
             frames: this.anims.generateFrameNumbers('werewolf_left', { start: 0, end: 3, first: 0}),
@@ -227,7 +237,7 @@ class Level01 extends Phaser.Scene {
             loop: false
         });
         this.shotgunSFX = this.sound.add('shotgun_sfx', {
-            volume: 2,
+            volume: 3,
             loop: false
         });
         this.batSFX = this.sound.add('bat_sfx', {
@@ -272,9 +282,17 @@ class Level01 extends Phaser.Scene {
         this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
         this.shotgunArray.push(this.shotgunPickup);
 
-        // Adds villager to level
+        // Adds villager and gems to level
         this.villager = this.physics.add.sprite(860, 204, 'villager').setOrigin(0,0);
         this.villager.setScale(0.5);
+        this.gem = this.physics.add.sprite(350, 220, 'gem').setOrigin(0,0);
+        this.gem.setScale(0.5);
+        this.gems = this.add.group();
+        this.gems.add(this.gem);
+
+        this.melee = this.physics.add.sprite(-100, -100, 'bullet');
+        this.melee.body.setAllowGravity(false);
+        this.melee.alpha = 0.1;
 
         // Adds enemies to screen and scales size
         this.enemy1 = new Enemy(this, 290, 220, 'thrall', 0, 290, 450, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
@@ -300,6 +318,7 @@ class Level01 extends Phaser.Scene {
         });
         this.physics.add.collider(this.playerChar, groundLayer);
         this.physics.add.collider(this.villager, groundLayer);
+        this.physics.add.collider(this.gem, groundLayer);
         this.physics.add.collider(this.thrallArray, groundLayer);
         this.physics.add.collider(this.metalArray, groundLayer);
         this.physics.add.collider(this.wolfArray, groundLayer);
@@ -313,7 +332,10 @@ class Level01 extends Phaser.Scene {
         this.physics.add.collider(this.villager, this.playerChar, (villager, player) => {
             villager.destroy();
             this.villagerSFX.play();
-            
+        });
+        this.physics.add.collider(this.gems, this.playerChar, (gem, player) => {
+            gem.destroy();
+            this.gemSFX.play();
         });
 
         this.physics.add.collider(this.thrallArray, this.playerChar, (enemy, player) => {
@@ -321,6 +343,13 @@ class Level01 extends Phaser.Scene {
             if(!this.thrallSFX.isPlaying){
                 this.thrallSFX.play();
             }
+            if(enemy.body.velocity.x > 0){
+                this.playerChar.x += 20;
+            }else{
+                this.playerChar.x -= 20;
+            }
+            this.playerChar.hp --;
+            console.log("Player HP: " + this.playerChar.hp);
         });
 
         this.physics.add.collider(this.metalArray, this.playerChar, (enemy, player) => {
@@ -343,20 +372,36 @@ class Level01 extends Phaser.Scene {
             if(!this.thrallSFX.isPlaying){
                 this.roarSFX.play();
             }
+            if(enemy.body.velocity.x > 0){
+                this.playerChar.x += 20;
+            }else{
+                this.playerChar.x -= 20;
+            }
+            this.playerChar.hp --;
+            console.log("Player HP: " + this.playerChar.hp);
         });
 
         // Adds collisions between enemies and bullets
         this.physics.add.overlap(this.thrallArray, this.bulletArray, (obj1, obj2) => {
             obj1.damage();
             obj2.destroy();
-        })
+        });
         this.physics.add.overlap(this.wolfArray, this.bulletArray, (obj1, obj2) => {
             obj1.damage();
             obj2.destroy();
-        })
+        });
         this.physics.add.overlap(this.metalArray, this.bulletArray, (obj1, obj2) => {
-            obj1.damage();
+            this.bulletSFX.play();
             obj2.destroy();
+        });
+
+        this.physics.add.overlap(this.thrallArray, this.melee, (obj1, obj2) => {
+            obj1.damage();
+            obj2.x = -100;
+        })
+        this.physics.add.overlap(this.metalArray, this.melee, (obj1, obj2) => {
+            obj1.damage();
+            obj2.x = -100;
         })
 
         // Adds pistol to player inventory and destroys collectible
@@ -366,6 +411,7 @@ class Level01 extends Phaser.Scene {
             this.gunSFX.play();
         })
 
+        // Adds shotgun to player inventory and destroys collectible
         this.physics.add.overlap(this.playerChar, this.shotgunArray, (obj1, obj2) => {
             this.playerChar.itemStatus = 3;
             obj2.destroy();
@@ -376,9 +422,17 @@ class Level01 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.playerChar, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setZoom(1.5);
+
+        // sets up timer for knife attacks
+        this.timer = 0;
+        this.delay = 500;
     }
 
-    update(){
+    update(time, delta){
+        if(this.playerChar.hp <= 0){
+            this.scene.start('EndingScene');
+            return;
+        }
         // Updates player and enemy positions
         this.playerChar.update();
         this.thrallArray.forEach(element => {
@@ -394,10 +448,26 @@ class Level01 extends Phaser.Scene {
             element.update();
         });
         
+        this.timer += delta;
+        while (this.timer > this.delay) {
+            this.timer -= this.delay;
+            this.melee.x = -100;
+        }
+
         // Attacks
         if (Phaser.Input.Keyboard.JustDown(keyF)){
             switch (this.playerChar.itemStatus){
                 case 0: //melee
+                    this.melee.y = this.playerChar.y+15;
+                    if(this.playerChar.facingRight){
+                        this.melee.x = this.playerChar.x+30;
+                        if(this.playerChar.anims.currentAnim.key != 'stab_right_knife'){
+                            this.playerChar.play('stab_right_knife', true);
+                        }
+                    }else{
+                        this.melee.x = this.playerChar.x-5;
+                        this.playerChar.anims.play('stab_left_knife');
+                    }
                     break;
                 case 1: //nothing
                     break;
