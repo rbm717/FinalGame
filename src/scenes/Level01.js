@@ -17,10 +17,11 @@ class Level01 extends Phaser.Scene {
 
 
         this.load.image('thrall', 'thrall.png');
-        //this.load.image('werewolf', 'werewolf.png');
         this.load.image('pistol', 'pistol1.png');
         this.load.image('shotgun', 'shotgun1.png');
         this.load.image('bullet', 'bullet.png');
+        this.load.image('villager', 'villager.png');
+        this.load.image('gem', 'gem.png');
         
         // Loads animations
         this.load.spritesheet('player_right', 'player_right.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
@@ -31,10 +32,11 @@ class Level01 extends Phaser.Scene {
         this.load.spritesheet('player_jump_left', 'player_jump_left.png', {frameWidth: 54, frameHeight: 60, startFrame: 0, endFrame: 2});
         this.load.spritesheet('pistol_hover', 'pistol.png', {frameWidth: 33, frameHeight: 18, startFrame: 0, endFrame: 3});
 
-
+        // Shotgun animations
         this.load.spritesheet('player_right_shotgun', 'player_right_shotgun.png', {frameWidth: 53.75, frameHeight: 66, startFrame: 0, endFrame: 3});
         this.load.spritesheet('player_left_shotgun', 'player_left_shotgun.png', {frameWidth: 53.75, frameHeight: 66, startFrame: 0, endFrame: 3});
 
+        // Knife animations
         this.load.spritesheet('player_right_knife', 'player_right_knife.png', {frameWidth: 74, frameHeight: 64, startFrame: 0, endFrame: 2});
         this.load.spritesheet('player_left_knife', 'player_left_knife.png', {frameWidth: 74, frameHeight: 64, startFrame: 0, endFrame: 2});
 
@@ -43,37 +45,37 @@ class Level01 extends Phaser.Scene {
         this.load.spritesheet('thrall_left', 'thrall_left.png', {frameWidth: 41, frameHeight: 46, startFrame: 0, endFrame: 3});
         this.load.spritesheet('thrall_right', 'thrall_right.png', {frameWidth: 41, frameHeight: 46, startFrame: 0, endFrame: 3});
 
+        // Werewolf
         this.load.spritesheet('werewolf_left', 'werewolf_left.png', {frameWidth: 61, frameHeight: 66, startFrame: 0, endFrame: 3});
         this.load.spritesheet('werewolf_right', 'werewolf_right.png', {frameWidth: 61, frameHeight: 66, startFrame: 0, endFrame: 3});
 
+        // Armor
         this.load.spritesheet('metal_left', 'armor_left.png', {frameWidth: 35.75, frameHeight: 76, startFrame: 0, endFrame: 3});
         this.load.spritesheet('metal_right', 'armor_right.png', {frameWidth: 35.75, frameHeight: 76, startFrame: 0, endFrame: 3});
 
-        // Temporary, replace with finalized assets
+        // For loading the level map
         this.load.image("1bit_tiles", "spritesheet.png");
-
         this.load.image("background", "backgroundvamp.png");
-        
-       
-       
         this.load.spritesheet("level01_sheet", "spritesheet.png", {
             frameWidth: 16,
             frameHeight: 16
         });
         this.load.tilemapTiledJSON("platform_map", "level01.json");
     
+        // Preloads sound
         this.load.audio('bullet_sfx', 'bullet-hit_sfx.wav');
         this.load.audio('coin_sfx', 'coins_sfx.wav');
         this.load.audio('gun_sfx', 'gun-load_sfx.wav');
         this.load.audio('jump_sfx', 'jump_sfx.mp3');
         this.load.audio('shoot_sfx', 'shoot_sfx.ogg');
         this.load.audio('thrall_sfx', 'thrall.wav'); 
-
         this.load.audio('shotgun_sfx', 'shotgun.wav');
         this.load.audio('roar_sfx', 'roar.wav');
         this.load.audio('metal_sfx', 'metal.wav');
         this.load.audio('cocking_sfx', 'cocking.wav');
         this.load.audio('bat_sfx', 'bat.wav');
+        this.load.audio('villager_sfx', 'villager.wav');
+        this.load.audio('gem_sfx', 'Coin.wav');
     }
 
     create(){
@@ -82,18 +84,15 @@ class Level01 extends Phaser.Scene {
         // add a tileset to the map
         const tileset = map.addTilesetImage("BasicStuff", "1bit_tiles");
         const bg = map.addTilesetImage("BGvamp", "background");
-       
-        //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
 
         // create tilemap layers
         const backgroundLayer = map.createLayer("Background", bg, 0, 0);
-        //this.backVamp = this.add.tileSprite(0,0, game.config.width, game.config.height, "Background").setOrigin(0,0);
         const groundLayer = map.createLayer("Floor", tileset, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
         this.bulletArray = [];
         this.pistolArray = [];
         this.shotgunArray = [];
-        this.enemyArray = [];
+        this.thrallArray = [];
         this.wolfArray = [];
         this.metalArray = [];
 
@@ -127,7 +126,6 @@ class Level01 extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
         this.anims.create({
             key: 'run_right_gun',
             frames: this.anims.generateFrameNumbers('player_right_gun', { start: 0, end: 3, first: 0}),
@@ -199,6 +197,7 @@ class Level01 extends Phaser.Scene {
             repeat: -1
         });
 
+        // Loads sounds
         this.bulletSFX = this.sound.add('bullet_sfx', {
             volume: 1,
             loop: false
@@ -223,7 +222,6 @@ class Level01 extends Phaser.Scene {
             volume: .7,
             loop: false
         });
-
         this.roarSFX = this.sound.add('roar_sfx', {
             volume: 3,
             loop: false
@@ -241,6 +239,14 @@ class Level01 extends Phaser.Scene {
             loop: false
         });
         this.metalSFX = this.sound.add('metal_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.villagerSFX = this.sound.add('villager_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.gemSFX = this.sound.add('gem_sfx', {
             volume: 1,
             loop: false
         });
@@ -262,12 +268,15 @@ class Level01 extends Phaser.Scene {
 
         // Creates shotgun collectible item in game world
         this.shotgunPickup = this.physics.add.sprite(80, 200, 'shotgun');
-        //this.pistolPickup.anims.play('pistol_anim');
         this.shotgunPickup.setScale(0.5);
         this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
         this.shotgunArray.push(this.shotgunPickup);
 
-        // Adds enemy to screen and scales size
+        // Adds villager to level
+        this.villager = this.physics.add.sprite(860, 204, 'villager').setOrigin(0,0);
+        this.villager.setScale(0.5);
+
+        // Adds enemies to screen and scales size
         this.enemy1 = new Enemy(this, 290, 220, 'thrall', 0, 290, 450, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
         this.enemy1.body.setSize(this.enemy1.width/2);
         this.enemy1.setScale(0.6);
@@ -280,16 +289,18 @@ class Level01 extends Phaser.Scene {
         this.enemy3.body.setSize(this.enemy3.width/2);
         this.enemy3.setScale(0.6);
 
-        this.enemyArray = [this.enemy1]
+        // Adds enemies to arrays for collision detection
+        this.thrallArray = [this.enemy1]
         this.metalArray = [this.enemy2]
         this.wolfArray = [this.enemy3]
 
-        // Enables collision with the ground layer of the map
+        // Enables collisions with the ground layer of the map
         groundLayer.setCollisionByProperty({ 
             collides: true 
         });
         this.physics.add.collider(this.playerChar, groundLayer);
-        this.physics.add.collider(this.enemyArray, groundLayer);
+        this.physics.add.collider(this.villager, groundLayer);
+        this.physics.add.collider(this.thrallArray, groundLayer);
         this.physics.add.collider(this.metalArray, groundLayer);
         this.physics.add.collider(this.wolfArray, groundLayer);
         this.physics.add.collider(this.pistolArray, groundLayer);
@@ -297,8 +308,15 @@ class Level01 extends Phaser.Scene {
         this.physics.add.collider(this.bulletArray, groundLayer, (obj1, obj2) => {
             obj1.destroy();
         });
-        //this.physics.add.collider(this.bulletArray, this.antiPlayer);
-        this.physics.add.collider(this.enemyArray, this.playerChar, (enemy, player) => {
+
+        // Allows villager to be "collected"
+        this.physics.add.collider(this.villager, this.playerChar, (villager, player) => {
+            villager.destroy();
+            this.villagerSFX.play();
+            
+        });
+
+        this.physics.add.collider(this.thrallArray, this.playerChar, (enemy, player) => {
             // Note: Need to have it hurt player, maybe push them back?
             if(!this.thrallSFX.isPlaying){
                 this.thrallSFX.play();
@@ -311,6 +329,13 @@ class Level01 extends Phaser.Scene {
                 this.metalSFX.play();
                 
             }
+            if(enemy.body.velocity.x > 0){
+                this.playerChar.x += 20;
+            }else{
+                this.playerChar.x -= 20;
+            }
+            this.playerChar.hp --;
+            console.log("Player HP: " + this.playerChar.hp);
         });
 
         this.physics.add.collider(this.wolfArray, this.playerChar, (enemy, player) => {
@@ -320,16 +345,15 @@ class Level01 extends Phaser.Scene {
             }
         });
 
-        this.physics.add.overlap(this.enemyArray, this.bulletArray, (obj1, obj2) => {
+        // Adds collisions between enemies and bullets
+        this.physics.add.overlap(this.thrallArray, this.bulletArray, (obj1, obj2) => {
             obj1.damage();
             obj2.destroy();
         })
-
         this.physics.add.overlap(this.wolfArray, this.bulletArray, (obj1, obj2) => {
             obj1.damage();
             obj2.destroy();
         })
-
         this.physics.add.overlap(this.metalArray, this.bulletArray, (obj1, obj2) => {
             obj1.damage();
             obj2.destroy();
@@ -355,25 +379,22 @@ class Level01 extends Phaser.Scene {
     }
 
     update(){
-        //this.backVamp.tilePostionX -= 2;
-
+        // Updates player and enemy positions
         this.playerChar.update();
-        this.enemyArray.forEach(element => {
+        this.thrallArray.forEach(element => {
             element.update();
         });
-
         this.metalArray.forEach(element => {
             element.update();
         });
-
         this.wolfArray.forEach(element => {
             element.update();
         });
         this.bulletArray.forEach(element => {
             element.update();
         });
-        //console.log("(" + this.playerChar.x + ", " +this.playerChar.y + ")");
         
+        // Attacks
         if (Phaser.Input.Keyboard.JustDown(keyF)){
             switch (this.playerChar.itemStatus){
                 case 0: //melee
