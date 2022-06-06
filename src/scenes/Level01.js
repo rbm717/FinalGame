@@ -109,7 +109,7 @@ class Level01 extends Phaser.Scene {
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Establishes bounds and gravity of level
-        this.physics.world.setBounds(0, 0, 1600, game.config.height);
+        this.physics.world.setBounds(0, 0, 900, game.config.height);
         this.gravity = 1500;
 
         // Establishes animations 
@@ -448,6 +448,7 @@ class Level01 extends Phaser.Scene {
             element.update();
         });
         
+        // Updates melee timer and resets melee hit box
         this.timer += delta;
         while (this.timer > this.delay) {
             this.timer -= this.delay;

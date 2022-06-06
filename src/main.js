@@ -17,13 +17,13 @@ let config = {
             gravity: { y: 100 }
         }
     },
-    scene: [Menu, Level01, Ending]
+    scene: [Menu, Level01, Ending, Credits]
 }
 
 let game = new Phaser.Game(config);
 
 // Reserve key tags
-let keySpace, keyA, keyD, keyW, keyS, keyUp, keyLEFT, keyRIGHT, keyDown, keyF, keyX;
+let keySpace, keyA, keyD, keyW, keyS, keyUp, keyLEFT, keyRIGHT, keyDown, keyC, keyF, keyX;
 // globals
 const centerX = game.config.width / 2;
 const centerY = game.config.height / 2;
