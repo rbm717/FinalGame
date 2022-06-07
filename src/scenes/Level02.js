@@ -75,8 +75,7 @@ class Level02 extends Phaser.Scene {
         this.load.audio('bat_sfx', 'bat.wav');
         this.load.audio('villager_sfx', 'villager.wav');
         this.load.audio('gem_sfx', 'Coin.wav');
-        this.load.audio('corridor_music', 'corridor_music.wav');
-
+        this.load.audio('hit_sfx', 'hitsound.wav');
     }
 
     create(){
@@ -112,7 +111,7 @@ class Level02 extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 900, 1000);
         this.gravity = 1500;
 
-        // Note: lines 117 to 263 establish animations and sound
+        // Note: lines 117 to 272 establish animations and sound
 
         // Establishes animations 
         this.anims.create({
@@ -229,10 +228,6 @@ class Level02 extends Phaser.Scene {
             volume: 1,
             loop: false
         });
-        this.corridorMusic = this.sound.add('corridor_music', {
-            volume: 2,
-            loop: true
-        });
         this.thrallSFX = this.sound.add('thrall_sfx', {
             volume: .7,
             loop: false
@@ -262,6 +257,10 @@ class Level02 extends Phaser.Scene {
             loop: false
         });
         this.gemSFX = this.sound.add('gem_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.hitSFX = this.sound.add('hit_sfx', {
             volume: 1,
             loop: false
         });
@@ -349,7 +348,6 @@ class Level02 extends Phaser.Scene {
         this.physics.add.collider(this.metalArray, this.playerChar, (enemy, player) => {
             if(!this.thrallSFX.isPlaying){
                 this.metalSFX.play();
-                
             }
             if(!this.playerChar.facingRight){
                 this.playerChar.x += 20;
@@ -372,10 +370,16 @@ class Level02 extends Phaser.Scene {
 
         // Adds collisions between enemies and bullets
         this.physics.add.overlap(this.thrallArray, this.bulletArray, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += thrallScore;
+            }
             obj1.damage();
             obj2.destroy();
         });
         this.physics.add.overlap(this.wolfArray, this.bulletArray, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += werewolfScore;
+            }
             obj1.damage();
             obj2.destroy();
         });
@@ -385,20 +389,26 @@ class Level02 extends Phaser.Scene {
         });
 
         this.physics.add.overlap(this.thrallArray, this.melee, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += thrallScore;
+            }
             obj1.damage();
             obj2.x = -100;
+            this.hitSFX.play();
         })
         this.physics.add.overlap(this.metalArray, this.melee, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += metalScore;
+            }
             obj1.damage();
             obj2.x = -100;
+            this.hitSFX.play();
         })
 
         // setup camera
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.playerChar, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setZoom(1.5);
-
-        this.corridorMusic.play();
 
 
         // sets up timer for knife attacks
@@ -413,8 +423,6 @@ class Level02 extends Phaser.Scene {
             this.scene.start('EndingScene');
             return;
         }
-
-        console.log('scene2');
 
         // Updates player and enemy positions
         this.playerChar.update();

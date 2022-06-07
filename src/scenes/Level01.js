@@ -30,6 +30,7 @@ class Level01 extends Phaser.Scene {
         this.load.spritesheet('player_left_gun', 'player_left_gun.png', {frameWidth: 54, frameHeight: 67, startFrame: 0, endFrame: 3});
         this.load.spritesheet('player_jump_left', 'player_jump_left.png', {frameWidth: 54, frameHeight: 60, startFrame: 0, endFrame: 2});
         this.load.spritesheet('pistol_hover', 'pistol.png', {frameWidth: 33, frameHeight: 18, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('shotgun_hover', 'shotgun1_animation.png', {frameWidth: 38, frameHeight: 11, startFrame: 0, endFrame: 3});
 
         // Shotgun animations
         this.load.spritesheet('player_right_shotgun', 'player_right_shotgun.png', {frameWidth: 53.75, frameHeight: 66, startFrame: 0, endFrame: 3});
@@ -64,7 +65,6 @@ class Level01 extends Phaser.Scene {
         // Preloads sound
         this.load.audio('bullet_sfx', 'bullet-hit_sfx.wav');
         this.load.audio('coin_sfx', 'coins_sfx.wav');
-        this.load.audio('corridor_music', 'corridor_music.wav');
         this.load.audio('gun_sfx', 'gun-load_sfx.wav');
         this.load.audio('jump_sfx', 'jump_sfx.mp3');
         this.load.audio('shoot_sfx', 'shoot_sfx.ogg');
@@ -76,6 +76,7 @@ class Level01 extends Phaser.Scene {
         this.load.audio('bat_sfx', 'bat.wav');
         this.load.audio('villager_sfx', 'villager.wav');
         this.load.audio('gem_sfx', 'Coin.wav');
+        this.load.audio('hit_sfx', 'hitsound.wav');
     }
 
     create(){
@@ -113,7 +114,7 @@ class Level01 extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 900, game.config.height);
         this.gravity = 1500;
 
-        // Note: lines 117 to 263 establish animations and sound
+        // Note: lines 121 to 291 establish animations and sound
 
         // Establishes animations 
         this.anims.create({
@@ -137,6 +138,18 @@ class Level01 extends Phaser.Scene {
         this.anims.create({
             key: 'run_left_gun',
             frames: this.anims.generateFrameNumbers('player_left_gun', { start: 0, end: 3, first: 0}),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'jump_right',
+            frames: this.anims.generateFrameNumbers('player_jump_right', { start: 0, end: 2, first: 0}),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'jump_left',
+            frames: this.anims.generateFrameNumbers('player_jump_left', { start: 0, end: 2, first: 0}),
             frameRate: 10,
             repeat: -1
         });
@@ -170,6 +183,12 @@ class Level01 extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
+        this.anims.create({
+            key: 'shotgun_anim',
+            frames: this.anims.generateFrameNumbers('shotgun_hover', { start: 0, end: 3, first: 0}),
+            frameRate: 10,
+            repeat: -1
+        })
 
         this.anims.create({
             key: 'thrall_left_anim',
@@ -242,10 +261,6 @@ class Level01 extends Phaser.Scene {
             volume: 10,
             loop: false
         });
-        this.corridorMusic = this.sound.add('corridor_music', {
-            volume: 2,
-            loop: true
-        });
         
         this.batSFX = this.sound.add('bat_sfx', {
             volume: 1,
@@ -267,6 +282,10 @@ class Level01 extends Phaser.Scene {
             volume: 1,
             loop: false
         });
+        this.hitSFX = this.sound.add('hit_sfx', {
+            volume: 1,
+            loop: false
+        });
 
         // Instantiates player character
         this.playerChar = new Player(this, 100, 100, 'player', 0, this.jumpSFX).setOrigin(0,0);
@@ -277,14 +296,15 @@ class Level01 extends Phaser.Scene {
         this.playerChar.body.setCollideWorldBounds(true);
 
         // Creates pistol collectible item in game world
-        this.pistolPickup = this.physics.add.sprite(50, 200, 'pistol');
+        this.pistolPickup = this.physics.add.sprite(50, 250, 'pistol');
         this.pistolPickup.anims.play('pistol_anim');
         this.pistolPickup.setScale(0.5);
         this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
         this.pistolArray.push(this.pistolPickup);
 
         // Creates shotgun collectible item in game world
-        this.shotgunPickup = this.physics.add.sprite(80, 200, 'shotgun');
+        this.shotgunPickup = this.physics.add.sprite(80, 250, 'shotgun');
+        this.shotgunPickup.anims.play('shotgun_anim');
         this.shotgunPickup.setScale(0.5);
         this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
         this.shotgunArray.push(this.shotgunPickup);
@@ -386,10 +406,16 @@ class Level01 extends Phaser.Scene {
 
         // Adds collisions between enemies and bullets
         this.physics.add.overlap(this.thrallArray, this.bulletArray, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += thrallScore;
+            }
             obj1.damage();
             obj2.destroy();
         });
         this.physics.add.overlap(this.wolfArray, this.bulletArray, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += werewolfScore;
+            }
             obj1.damage();
             obj2.destroy();
         });
@@ -399,12 +425,20 @@ class Level01 extends Phaser.Scene {
         });
 
         this.physics.add.overlap(this.thrallArray, this.melee, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += thrallScore;
+            }
             obj1.damage();
             obj2.x = -100;
+            this.hitSFX.play();
         })
         this.physics.add.overlap(this.metalArray, this.melee, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += metalScore;
+            }
             obj1.damage();
             obj2.x = -100;
+            this.hitSFX.play();
         })
 
         // Adds pistol to player inventory and destroys collectible
@@ -425,8 +459,6 @@ class Level01 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.playerChar, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setZoom(1.5);
-
-        this.corridorMusic.play();
 
         // sets up timer for knife attacks
         this.timer = 0;

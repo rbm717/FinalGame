@@ -14,7 +14,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.itemStatus = 0;
         this.isAttacking;
         this.facingRight = true;
-        this.jumpSFX = jumpSFX
+        this.jumpSFX = jumpSFX;
         this.isStabbing = false;
     }
 
@@ -53,11 +53,12 @@ class Player extends Phaser.GameObjects.Sprite {
         } else {
             this.body.setVelocityX(0);
             if (!this.isStabbing ){
-            this.play('run_right', false);
-            this.play('run_left', false);
+                this.play('run_right', false);
+                this.play('run_left', false);
             }
         }
 
+        // Sets idle texture
         if (this.body.velocity.x == 0 && !this.facingRight) {
             if (!this.isStabbing) {
                 if (this.itemStatus == 2) {
@@ -89,6 +90,11 @@ class Player extends Phaser.GameObjects.Sprite {
         if (this.body.blocked.down && Phaser.Input.Keyboard.JustDown(keyUp) && !this.isCrouching && !this.isAttacking) {
             this.body.setVelocityY(this.jumpForce);
             this.jumpSFX.play();
+            if(this.facingRight){
+                this.play('jump_right', true);
+            }else{
+                this.play('jump_left', true);
+            }
         }
     }
 

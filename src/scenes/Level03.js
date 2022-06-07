@@ -76,8 +76,7 @@ class level03 extends Phaser.Scene {
         this.load.audio('bat_sfx', 'bat.wav');
         this.load.audio('villager_sfx', 'villager.wav');
         this.load.audio('gem_sfx', 'Coin.wav');
-        this.load.audio('corridor_music', 'corridor_music.wav');
-
+        this.load.audio('hit_sfx', 'hitsound.wav');
     }
 
     create(){
@@ -115,7 +114,7 @@ class level03 extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 1790, game.config.height);
         this.gravity = 1500;
 
-        // Note: lines 117 to 263 establish animations and sound
+        // Note: lines 121 to 281 establish animations and sound
 
         // Establishes animations 
         this.anims.create({
@@ -177,7 +176,7 @@ class level03 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('shotgun_hover', { start: 0, end: 3, first: 0}),
             frameRate: 10,
             repeat: -1
-        })
+        });
 
         this.anims.create({
             key: 'thrall_left_anim',
@@ -238,10 +237,6 @@ class level03 extends Phaser.Scene {
             volume: 1,
             loop: false
         });
-        this.corridorMusic = this.sound.add('corridor_music', {
-            volume: 2,
-            loop: true
-        });
         this.thrallSFX = this.sound.add('thrall_sfx', {
             volume: .7,
             loop: false
@@ -271,6 +266,10 @@ class level03 extends Phaser.Scene {
             loop: false
         });
         this.gemSFX = this.sound.add('gem_sfx', {
+            volume: 1,
+            loop: false
+        });
+        this.hitSFX = this.sound.add('hit_sfx', {
             volume: 1,
             loop: false
         });
@@ -361,11 +360,11 @@ class level03 extends Phaser.Scene {
         this.melee.alpha = 0.1;
 
         // Adds enemies to screen and scales size
-        this.enemy1 = new Enemy(this, 290, 220, 'thrall', 0, 290, 450, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
+        this.enemy1 = new Enemy(this, 290, 220, 'thrall', 0, 250, 400, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
         this.enemy1.body.setSize(this.enemy1.width/2);
         this.enemy1.setScale(0.6);
 
-        this.enemy2 = new Enemy(this, 650, 120, 'thrall', 0, 650, 840, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
+        this.enemy2 = new Enemy(this, 675, 120, 'thrall', 0, 675, 840, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
         this.enemy2.body.setSize(this.enemy2.width/2);
         this.enemy2.setScale(0.6);
         this.enemy4 = new Enemy(this, 1050, 120, 'thrall', 0, 860, 1050, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
@@ -448,10 +447,16 @@ class level03 extends Phaser.Scene {
 
         // Adds collisions between enemies and bullets
         this.physics.add.overlap(this.thrallArray, this.bulletArray, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += thrallScore;
+            }
             obj1.damage();
             obj2.destroy();
         });
         this.physics.add.overlap(this.wolfArray, this.bulletArray, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += werewolfScore;
+            }
             obj1.damage();
             obj2.destroy();
         });
@@ -461,12 +466,20 @@ class level03 extends Phaser.Scene {
         });
 
         this.physics.add.overlap(this.thrallArray, this.melee, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += thrallScore;
+            }
             obj1.damage();
             obj2.x = -100;
+            this.hitSFX.play();
         })
         this.physics.add.overlap(this.metalArray, this.melee, (obj1, obj2) => {
+            if(obj1.hp <= 1){
+                score += metalScore;
+            }
             obj1.damage();
             obj2.x = -100;
+            this.hitSFX.play();
         })
 
         // Adds pistol to player inventory and destroys collectible
@@ -487,8 +500,6 @@ class level03 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.playerChar, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setZoom(1.5);
-
-        this.corridorMusic.play();
 
 
         // sets up timer for knife attacks

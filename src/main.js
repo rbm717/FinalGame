@@ -35,3 +35,5 @@ const centerX = game.config.width / 2;
 const centerY = game.config.height / 2;
 const w = game.config.width;
 const h = game.config.height;
+// Allows music to be played continuously amongst all scenes
+let corridorMusic;
