@@ -320,10 +320,12 @@ class Level02 extends Phaser.Scene {
             villager.destroy();
             this.villagerSFX.play();
             this.scene.start('level03');
+            score += villagerScore;
         });
         this.physics.add.collider(this.gems, this.playerChar, (gem, player) => {
             gem.destroy();
             this.gemSFX.play();
+            score += gemScore;
         });
 
         // Adds collider between player and enemies: Knocks player back, damages player, and plays sound

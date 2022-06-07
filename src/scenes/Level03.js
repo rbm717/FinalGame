@@ -317,6 +317,19 @@ class level03 extends Phaser.Scene {
         this.gem9.setScale(0.5);
         this.gem10 = this.physics.add.sprite(1130, 190, 'gem').setOrigin(0,0);
         this.gem10.setScale(0.5);
+
+        this.gem17 = this.physics.add.sprite(1705, 30, 'gem').setOrigin(0,0);
+        this.gem17.setScale(0.5);
+        this.gem12 = this.physics.add.sprite(1675, 60, 'gem').setOrigin(0,0);
+        this.gem12.setScale(0.5);
+        this.gem13 = this.physics.add.sprite(1640, 80, 'gem').setOrigin(0,0);
+        this.gem13.setScale(0.5);
+        this.gem14 = this.physics.add.sprite(1610, 112, 'gem').setOrigin(0,0);
+        this.gem14.setScale(0.5);
+        this.gem15 = this.physics.add.sprite(1575, 155, 'gem').setOrigin(0,0);
+        this.gem15.setScale(0.5);
+        this.gem16 = this.physics.add.sprite(1543, 190, 'gem').setOrigin(0,0);
+        this.gem16.setScale(0.5);
         
         this.gems = this.add.group();
         this.gems.add(this.gem);
@@ -330,6 +343,12 @@ class level03 extends Phaser.Scene {
         this.gems.add(this.gem9);
         this.gems.add(this.gem10);
         this.gems.add(this.gem11);
+        this.gems.add(this.gem12);
+        this.gems.add(this.gem13);
+        this.gems.add(this.gem14);
+        this.gems.add(this.gem15);
+        this.gems.add(this.gem16);
+        this.gems.add(this.gem17);
 
         this.melee = this.physics.add.sprite(-100, -100, 'bullet');
         this.melee.body.setAllowGravity(false);
@@ -340,18 +359,21 @@ class level03 extends Phaser.Scene {
         this.enemy1.body.setSize(this.enemy1.width/2);
         this.enemy1.setScale(0.6);
 
-        this.enemy2 = new Enemy(this, 590, 120, 'thrall', 0, 590, 750, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
+        this.enemy2 = new Enemy(this, 650, 120, 'thrall', 0, 650, 840, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
         this.enemy2.body.setSize(this.enemy2.width/2);
         this.enemy2.setScale(0.6);
+        this.enemy4 = new Enemy(this, 1050, 120, 'thrall', 0, 860, 1050, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
+        this.enemy4.body.setSize(this.enemy2.width/2);
+        this.enemy4.setScale(0.6);
 
-        this.enemy3 = new Enemy(this, 1000, 140, 'thrall', 0, 850, 980, 8, 100, 'werewolf_left_anim', 'werewolf_right_anim').setOrigin(0,0);
+        this.enemy3 = new Enemy(this, 1340, 140, 'thrall', 0, 1340, 1480, 8, 100, 'werewolf_left_anim', 'werewolf_right_anim').setOrigin(0,0);
         this.enemy3.body.setSize(this.enemy3.width/2);
         this.enemy3.setScale(0.6);
 
         // Adds enemies to arrays for collision detection
-        this.thrallArray = [this.enemy1]
-        this.metalArray = [this.enemy2]
-        this.wolfArray = [this.enemy3]
+        this.thrallArray = [this.enemy1];
+        this.metalArray = [this.enemy2, this.enemy4];
+        this.wolfArray = [this.enemy3];
 
         // Enables collisions with the ground layer of the map
         groundLayer.setCollisionByProperty({ 
@@ -374,10 +396,12 @@ class level03 extends Phaser.Scene {
             villager.destroy();
             this.villagerSFX.play();
             // this.scene.start('level02');
+            score += villagerScore;
         });
         this.physics.add.collider(this.gems, this.playerChar, (gem, player) => {
             gem.destroy();
             this.gemSFX.play();
+            score += gemScore;
         });
 
         // Adds collider between player and enemies: Knocks player back, damages player, and plays sound

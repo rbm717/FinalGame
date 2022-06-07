@@ -21,6 +21,12 @@ let config = {
 }
 
 let game = new Phaser.Game(config);
+let score = 0;
+let gemScore = 100;
+let thrallScore = 500;
+let metalScore = 1000;
+let werewolfScore = 1500;
+let villagerScore = 5000;
 
 // Reserve key tags
 let keySpace, keyA, keyD, keyW, keyS, keyUp, keyLEFT, keyRIGHT, keyDown, keyC, keyF, keyX;
