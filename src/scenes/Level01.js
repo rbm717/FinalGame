@@ -532,19 +532,19 @@ class Level01 extends Phaser.Scene {
                 case 3: //shotgun
                     this.bullet = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
                     this.bullet.x = this.playerChar.x;
-                    this.bullet.y = this.playerChar.y;
+                    this.bullet.y = this.playerChar.y + 10;
                     this.bulletArray.push(this.bullet);
 
 
                     this.bullet1 = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
                     this.bullet1.x = this.playerChar.x;
-                    this.bullet1.y = this.playerChar.y + 5;
+                    this.bullet1.y = this.playerChar.y + 15;
                     this.bulletArray.push(this.bullet1);
 
 
                     this.bullet2 = new Bullet(this, 100, 100, 'bullet', 0, this.playerChar.facingRight ? -1 : 1).setOrigin(0,0);
                     this.bullet2.x = this.playerChar.x;
-                    this.bullet2.y = this.playerChar.y - 5;
+                    this.bullet2.y = this.playerChar.y + 20;
                     this.bulletArray.push(this.bullet2);
                     this.shotgunSFX.play();
                     break;

@@ -12,7 +12,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug:true, // Used to observe hitboxes when testing
+            //debug:true, // Used to observe hitboxes when testing
             useTree: false,
             gravity: { y: 100 }
         }
