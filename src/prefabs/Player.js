@@ -20,7 +20,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
 
     update() {
-        console.log(this.isStabbing);
         // Left & right movement
         if (keyLEFT.isDown && !this.isAttacking) {
             this.facingRight = false;
@@ -100,7 +99,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
     damage() {
         this.hp--;
-        //console.log("HP: " + this.hp);
     }
 
 }

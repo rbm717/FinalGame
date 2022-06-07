@@ -1,6 +1,6 @@
-class Level01 extends Phaser.Scene {
+class Level02 extends Phaser.Scene {
     constructor() {
-        super("level01");
+        super("level02");
     }
 
     preload(){
@@ -53,13 +53,13 @@ class Level01 extends Phaser.Scene {
         this.load.spritesheet('metal_right', 'armor_right.png', {frameWidth: 35.75, frameHeight: 76, startFrame: 0, endFrame: 3});
 
         // For loading the level map
-        this.load.image("1bit_tiles", "spritesheet.png");
+        this.load.image("tiles", "spritesheet.png");
         this.load.image("background", "backgroundvamp.png");
-        this.load.spritesheet("level01_sheet", "spritesheet.png", {
+        this.load.spritesheet("level02_sheet", "spritesheet.png", {
             frameWidth: 16,
             frameHeight: 16
         });
-        this.load.tilemapTiledJSON("platform_map", "level01.json");
+        this.load.tilemapTiledJSON("level02_map", "level02.json");
     
         // Preloads sound
         this.load.audio('bullet_sfx', 'bullet-hit_sfx.wav');
@@ -79,9 +79,9 @@ class Level01 extends Phaser.Scene {
 
     create(){
         // add a tilemap
-        const map = this.add.tilemap("platform_map");
+        const map = this.add.tilemap("level02_map");
         // add a tileset to the map
-        const tileset = map.addTilesetImage("BasicStuff", "1bit_tiles");
+        const tileset = map.addTilesetImage("BasicStuff", "tiles");
         const bg = map.addTilesetImage("BGvamp", "background");
 
         // create tilemap layers
@@ -89,8 +89,6 @@ class Level01 extends Phaser.Scene {
         const groundLayer = map.createLayer("Floor", tileset, 0, 0);
         const sceneryLayer = map.createLayer("Scenery", tileset, 0, 0);
         this.bulletArray = [];
-        this.pistolArray = [];
-        this.shotgunArray = [];
         this.thrallArray = [];
         this.wolfArray = [];
         this.metalArray = [];
@@ -109,7 +107,7 @@ class Level01 extends Phaser.Scene {
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Establishes bounds and gravity of level
-        this.physics.world.setBounds(0, 0, 900, game.config.height);
+        this.physics.world.setBounds(0, 0, 1800, 1000);
         this.gravity = 1500;
 
         // Note: lines 117 to 263 establish animations and sound
@@ -270,19 +268,6 @@ class Level01 extends Phaser.Scene {
         this.playerChar.setScale(0.5);
         this.playerChar.body.setCollideWorldBounds(true);
 
-        // Creates pistol collectible item in game world
-        this.pistolPickup = this.physics.add.sprite(50, 200, 'pistol');
-        this.pistolPickup.anims.play('pistol_anim');
-        this.pistolPickup.setScale(0.5);
-        this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
-        this.pistolArray.push(this.pistolPickup);
-
-        // Creates shotgun collectible item in game world
-        this.shotgunPickup = this.physics.add.sprite(80, 200, 'shotgun');
-        this.shotgunPickup.setScale(0.5);
-        this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
-        this.shotgunArray.push(this.shotgunPickup);
-
         // Adds villager and gems to level
         this.villager = this.physics.add.sprite(860, 204, 'villager').setOrigin(0,0);
         this.villager.setScale(0.5);
@@ -296,21 +281,21 @@ class Level01 extends Phaser.Scene {
         this.melee.alpha = 0.1;
 
         // Adds enemies to screen and scales size
-        this.enemy1 = new Enemy(this, 290, 220, 'thrall', 0, 290, 450, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
+        this.enemy1 = new Enemy(this, 15, 510, 'thrall', 0, 15, 120, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
         this.enemy1.body.setSize(this.enemy1.width/2);
         this.enemy1.setScale(0.6);
 
-        this.enemy2 = new Enemy(this, 590, 120, 'thrall', 0, 590, 750, 6, 30, 'metal_left_anim', 'metal_right_anim').setOrigin(0,0);
+        this.enemy2 = new Enemy(this, 220, 510, 'thrall', 0, 130, 220, 4, 50, 'thrall_left_anim', 'thrall_right_anim').setOrigin(0,0);
         this.enemy2.body.setSize(this.enemy2.width/2);
         this.enemy2.setScale(0.6);
 
-        this.enemy3 = new Enemy(this, 1000, 140, 'thrall', 0, 850, 980, 8, 100, 'werewolf_left_anim', 'werewolf_right_anim').setOrigin(0,0);
+        this.enemy3 = new Enemy(this, 670, 120, 'thrall', 0, 670, 820, 8, 100, 'werewolf_left_anim', 'werewolf_right_anim').setOrigin(0,0);
         this.enemy3.body.setSize(this.enemy3.width/2);
         this.enemy3.setScale(0.6);
 
         // Adds enemies to arrays for collision detection
-        this.thrallArray = [this.enemy1]
-        this.metalArray = [this.enemy2]
+        this.thrallArray = [this.enemy1, this.enemy2]
+        this.metalArray = []
         this.wolfArray = [this.enemy3]
 
         // Enables collisions with the ground layer of the map
@@ -323,8 +308,6 @@ class Level01 extends Phaser.Scene {
         this.physics.add.collider(this.thrallArray, groundLayer);
         this.physics.add.collider(this.metalArray, groundLayer);
         this.physics.add.collider(this.wolfArray, groundLayer);
-        this.physics.add.collider(this.pistolArray, groundLayer);
-        this.physics.add.collider(this.shotgunArray, groundLayer);
         this.physics.add.collider(this.bulletArray, groundLayer, (obj1, obj2) => {
             obj1.destroy();
         });
@@ -333,7 +316,6 @@ class Level01 extends Phaser.Scene {
         this.physics.add.collider(this.villager, this.playerChar, (villager, player) => {
             villager.destroy();
             this.villagerSFX.play();
-            this.scene.start('level02');
         });
         this.physics.add.collider(this.gems, this.playerChar, (gem, player) => {
             gem.destroy();
@@ -399,20 +381,6 @@ class Level01 extends Phaser.Scene {
             obj2.x = -100;
         })
 
-        // Adds pistol to player inventory and destroys collectible
-        this.physics.add.overlap(this.playerChar, this.pistolArray, (obj1, obj2) => {
-            this.playerChar.itemStatus = 2;
-            obj2.destroy();
-            this.gunSFX.play();
-        })
-
-        // Adds shotgun to player inventory and destroys collectible
-        this.physics.add.overlap(this.playerChar, this.shotgunArray, (obj1, obj2) => {
-            this.playerChar.itemStatus = 3;
-            obj2.destroy();
-            this.cockingSFX.play();
-        })
-
         // setup camera
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.playerChar, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
@@ -430,6 +398,8 @@ class Level01 extends Phaser.Scene {
             this.scene.start('EndingScene');
             return;
         }
+
+        console.log('scene2');
 
         // Updates player and enemy positions
         this.playerChar.update();
