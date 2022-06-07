@@ -18,7 +18,7 @@ class Menu extends Phaser.Scene{
 
     update(){
         if(Phaser.Input.Keyboard.JustDown(keySpace) ){
-            this.scene.start('level03');
+            this.scene.start('level01');
         }
         if(Phaser.Input.Keyboard.JustDown(keyC) ){
             this.scene.start('creditScene');

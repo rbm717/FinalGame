@@ -107,7 +107,7 @@ class Level02 extends Phaser.Scene {
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Establishes bounds and gravity of level
-        this.physics.world.setBounds(0, 0, 1800, 1000);
+        this.physics.world.setBounds(0, 0, 900, 1000);
         this.gravity = 1500;
 
         // Note: lines 117 to 263 establish animations and sound

@@ -110,7 +110,7 @@ class level03 extends Phaser.Scene {
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Establishes bounds and gravity of level
-        this.physics.world.setBounds(0, 0, 2700, game.config.height);
+        this.physics.world.setBounds(0, 0, 1790, game.config.height);
         this.gravity = 1500;
 
         // Note: lines 117 to 263 establish animations and sound
@@ -395,7 +395,7 @@ class level03 extends Phaser.Scene {
         this.physics.add.collider(this.villager, this.playerChar, (villager, player) => {
             villager.destroy();
             this.villagerSFX.play();
-            // this.scene.start('level02');
+            this.scene.start('EndingGoodScene');
             score += villagerScore;
         });
         this.physics.add.collider(this.gems, this.playerChar, (gem, player) => {
