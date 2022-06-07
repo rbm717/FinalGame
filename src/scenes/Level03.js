@@ -76,6 +76,8 @@ class level03 extends Phaser.Scene {
         this.load.audio('bat_sfx', 'bat.wav');
         this.load.audio('villager_sfx', 'villager.wav');
         this.load.audio('gem_sfx', 'Coin.wav');
+        this.load.audio('corridor_music', 'corridor_music.wav');
+
     }
 
     create(){
@@ -235,6 +237,10 @@ class level03 extends Phaser.Scene {
         this.shootSFX = this.sound.add('shoot_sfx', {
             volume: 1,
             loop: false
+        });
+        this.corridorMusic = this.sound.add('corridor_music', {
+            volume: 2,
+            loop: true
         });
         this.thrallSFX = this.sound.add('thrall_sfx', {
             volume: .7,
@@ -481,6 +487,9 @@ class level03 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.playerChar, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setZoom(1.5);
+
+        this.corridorMusic.play();
+
 
         // sets up timer for knife attacks
         this.timer = 0;
