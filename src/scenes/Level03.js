@@ -484,16 +484,20 @@ class level03 extends Phaser.Scene {
 
         // Adds pistol to player inventory and destroys collectible
         this.physics.add.overlap(this.playerChar, this.pistolArray, (obj1, obj2) => {
-            this.playerChar.itemStatus = 2;
-            obj2.destroy();
-            this.gunSFX.play();
+            if(this.playerChar.itemStatus == 0){
+                this.playerChar.itemStatus = 2;
+                obj2.destroy();
+                this.gunSFX.play();
+            }
         })
 
         // Adds shotgun to player inventory and destroys collectible
         this.physics.add.overlap(this.playerChar, this.shotgunArray, (obj1, obj2) => {
-            this.playerChar.itemStatus = 3;
-            obj2.destroy();
-            this.cockingSFX.play();
+            if(this.playerChar.itemStatus == 0){
+                this.playerChar.itemStatus = 3;
+                obj2.destroy();
+                this.cockingSFX.play();
+            }
         })
 
         // setup camera
@@ -594,25 +598,19 @@ class level03 extends Phaser.Scene {
 
         }
         if (Phaser.Input.Keyboard.JustDown(keyX)){
-            console.log(this.playerChar.x + ", " + this.playerChar.y);
-            //dropping is TOO buggy
-
-            // if (this.playerChar.itemStatus == 2){
-            //     this.pistolPickup = this.physics.add.sprite(this.playerChar.x + 4, this.playerChar.y + 40, 'pistol');
-            //     this.pistolPickup.anims.play('pistol_anim');
-            //     this.pistolPickup.setScale(0.5);
-            //     //this.pistolPickup.height *= 2;
-            //     this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
-            //     this.pistolArray.push(this.pistolPickup);
-            // }
-            // else if (this.playerChar.itemStatus == 3){
-            //     this.shotgunPickup = this.physics.add.sprite(this.playerChar.x + 4, this.playerChar.y + 14, 'shotgun');
-            //     //this.shotgunPickup.anims.play('pistol_anim');
-            //     this.shotgunPickup.setScale(0.5);
-            //     //this.pistolPickup.height *= 2;
-            //     this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
-            //     this.shotgunArray.push(this.shotgunPickup);
-            //}
+            if (this.playerChar.itemStatus == 2){
+                this.pistolPickup = this.physics.add.sprite(1300, 30, 'pistol');
+                this.pistolPickup.anims.play('pistol_anim');
+                this.pistolPickup.setScale(0.5);
+                this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
+                this.pistolArray.push(this.pistolPickup);
+            }else if(this.playerChar.itemStatus == 3){
+                this.shotgunPickup = this.physics.add.sprite(210, 90, 'shotgun');
+                this.shotgunPickup.anims.play('shotgun_anim');
+                this.shotgunPickup.setScale(0.5);
+                this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
+                this.shotgunArray.push(this.shotgunPickup);
+            }
             this.playerChar.itemStatus = 0;
         }
     }

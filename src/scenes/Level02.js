@@ -503,25 +503,19 @@ class Level02 extends Phaser.Scene {
 
         }
         if (Phaser.Input.Keyboard.JustDown(keyX)){
-            console.log(this.playerChar.x + ", " + this.playerChar.y);
-            //dropping is TOO buggy
-
-            // if (this.playerChar.itemStatus == 2){
-            //     this.pistolPickup = this.physics.add.sprite(this.playerChar.x + 4, this.playerChar.y + 40, 'pistol');
-            //     this.pistolPickup.anims.play('pistol_anim');
-            //     this.pistolPickup.setScale(0.5);
-            //     //this.pistolPickup.height *= 2;
-            //     this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
-            //     this.pistolArray.push(this.pistolPickup);
-            // }
-            // else if (this.playerChar.itemStatus == 3){
-            //     this.shotgunPickup = this.physics.add.sprite(this.playerChar.x + 4, this.playerChar.y + 14, 'shotgun');
-            //     //this.shotgunPickup.anims.play('pistol_anim');
-            //     this.shotgunPickup.setScale(0.5);
-            //     //this.pistolPickup.height *= 2;
-            //     this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
-            //     this.shotgunArray.push(this.shotgunPickup);
-            //}
+            if (this.playerChar.itemStatus == 2){
+                this.pistolPickup = this.physics.add.sprite(50, 250, 'pistol');
+                this.pistolPickup.anims.play('pistol_anim');
+                this.pistolPickup.setScale(0.5);
+                this.pistolPickup.setSize(this.pistolPickup.width*1.5, this.pistolPickup.height*1.5);
+                this.pistolArray.push(this.pistolPickup);
+            }else if(this.playerChar.itemStatus == 3){
+                this.shotgunPickup = this.physics.add.sprite(80, 250, 'shotgun');
+                this.shotgunPickup.anims.play('shotgun_anim');
+                this.shotgunPickup.setScale(0.5);
+                this.shotgunPickup.setSize(this.shotgunPickup.width*1.5, this.shotgunPickup.height*1.5);
+                this.shotgunArray.push(this.shotgunPickup);
+            }
             this.playerChar.itemStatus = 0;
         }
     }
